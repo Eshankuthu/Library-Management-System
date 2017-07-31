@@ -1,5 +1,9 @@
 package ui;
 
+import java.awt.Component;
+
+import javax.swing.JOptionPane;
+
 import business.ControllerInterface;
 import business.LoginException;
 import business.SystemController;
@@ -12,6 +16,7 @@ import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
+import javafx.scene.image.Image;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.paint.Color;
@@ -24,6 +29,8 @@ public class LoginWindow extends Stage implements LibWindow {
 	public static final LoginWindow INSTANCE = new LoginWindow();
 	
 	private boolean isInitialized = false;
+	
+	private String authorization="";
 	
 	public boolean isInitialized() {
 		return isInitialized;
@@ -38,6 +45,8 @@ public class LoginWindow extends Stage implements LibWindow {
     private LoginWindow () {}
     public void init() {
         
+    	//this.getIcons().add(new Image(getClass().getResourceAsStream("ui/Unlock.png")));
+    	
         GridPane grid = new GridPane();
         grid.setId("top-container");
         grid.setAlignment(Pos.CENTER);
@@ -81,8 +90,15 @@ public class LoginWindow extends Stage implements LibWindow {
         		try {
         			ControllerInterface c = new SystemController();
         			c.login(userTextField.getText().trim(), pwBox.getText().trim());
-        			messageBar.setFill(Start.Colors.green);
-             	    messageBar.setText("Login successful");
+        			authorization=SystemController.currentAuth.toString();
+        			//tart.hideAllWindows();
+        			if(!ControlWindow.INSTANCE.isInitialized()) {
+        				ControlWindow.INSTANCE.init();
+        			}
+        			//ControlWindow.INSTANCE.clear();
+        			windowsUtility.hideAllWindows(INSTANCE);
+        			ControlWindow.INSTANCE.show();
+                
         		} catch(LoginException ex) {
         			messageBar.setFill(Start.Colors.red);
         			messageBar.setText("Error! " + ex.getMessage());
@@ -91,7 +107,7 @@ public class LoginWindow extends Stage implements LibWindow {
         	}
         });
 
-        Button backBtn = new Button("<= Back to Main");
+        Button backBtn = new Button("Log Out");
         backBtn.setOnAction(new EventHandler<ActionEvent>() {
         	@Override
         	public void handle(ActionEvent e) {
@@ -100,7 +116,7 @@ public class LoginWindow extends Stage implements LibWindow {
         	}
         });
         HBox hBack = new HBox(10);
-        hBack.setAlignment(Pos.BOTTOM_LEFT);
+        hBack.setAlignment(Pos.CENTER);
         hBack.getChildren().add(backBtn);
         grid.add(hBack, 0, 7);
         Scene scene = new Scene(grid);
@@ -108,6 +124,12 @@ public class LoginWindow extends Stage implements LibWindow {
         setScene(scene);
         
     }
+	public String getAuthorization() {
+		return authorization;
+	}
+	public void setAuthorization(String authorization) {
+		this.authorization = authorization;
+	}
 	
 	
 }

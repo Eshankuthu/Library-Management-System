@@ -13,6 +13,7 @@ import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextArea;
+import javafx.scene.image.Image;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.text.Font;
@@ -37,12 +38,16 @@ public class AllBooksWindow extends Stage implements LibWindow {
 	private AllBooksWindow() {}
 	
 	public void init() {
+		
+		//this.getIcons().add(new Image(getClass().getResourceAsStream("ui/library-icon.png")));
+		
 		GridPane grid = new GridPane();
 		grid.setId("top-container");
 		grid.setAlignment(Pos.CENTER);
         grid.setHgap(10);
         grid.setVgap(10);
         grid.setPadding(new Insets(25, 25, 25, 25));
+        //grid.positionInArea(child, areaX, areaY, areaWidth, areaHeight, areaBaselineOffset, margin, halignment, valignment, isSnapToPixel);
 
         Text scenetitle = new Text("All Book IDs");
         scenetitle.setFont(Font.font("Harlow Solid Italic", FontWeight.NORMAL, 20)); //Tahoma
@@ -50,18 +55,7 @@ public class AllBooksWindow extends Stage implements LibWindow {
 		
 		ta = new TextArea();
 		grid.add(ta, 0,1);
-		Button backBtn = new Button("<= Back to Main");
-        backBtn.setOnAction(new EventHandler<ActionEvent>() {
-        	@Override
-        	public void handle(ActionEvent e) {
-        		Start.hideAllWindows();
-        		Start.primStage().show();
-        	}
-        });
-        HBox hBack = new HBox(10);
-        hBack.setAlignment(Pos.BOTTOM_LEFT);
-        hBack.getChildren().add(backBtn);
-        grid.add(hBack, 0, 2);
+		
 		Scene scene = new Scene(grid);
 		scene.getStylesheets().add(getClass().getResource("library.css").toExternalForm());
         setScene(scene);
